@@ -47,6 +47,13 @@ class puppet::params {
       $puppet_ssldir                = '/var/lib/puppet/ssl'
       $passenger_package            = 'mod_passenger'
       $rack_package                 = 'rubygem-rack'
+      if $::operatingsystem == 'Fedora' {
+        $repo_location              = "http://yum.puppetlabs.com/fedora/f\$releasever/products/\$basearch"
+        $repo_deps_location         = "http://yum.puppetlabs.com/fedora/f\$releasever/dependencies/\$basearch"
+      } else {
+        $repo_location              = "http://yum.puppetlabs.com/el/\$releasever/products/\$basearch"
+        $repo_deps_location         = "http://yum.puppetlabs.com/el/\$releasever/dependencies/\$basearch"
+      }
     }
     'Suse': {
       $puppet_master_package        = 'puppet-server'
@@ -70,6 +77,7 @@ class puppet::params {
       $puppet_ssldir                = '/var/lib/puppet/ssl'
       $passenger_package            = 'libapache2-mod-passenger'
       $rack_package                 = 'librack-ruby'
+      $repo_location                = 'http://apt.puppetlabs.com'
     }
     'FreeBSD': {
       $puppet_agent_service         = 'puppet'
