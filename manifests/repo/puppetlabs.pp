@@ -3,7 +3,7 @@
 # that can be used to install puppet.
 #
 class puppet::repo::puppetlabs(
-  $repo_location = $puppet::params::repo_location,
+  $repo_location      = $puppet::params::repo_location,
   $repo_deps_location = $puppet::params::repo_deps_location,
 ) {
 
@@ -23,13 +23,20 @@ class puppet::repo::puppetlabs(
         gpgcheck => '1',
         gpgkey   => 'http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs',
       }
-
       yumrepo { 'puppetlabs':
         baseurl  => $repo_location,
         descr    => 'Puppet Labs Products $releasever - $basearch',
         enabled  => '1',
         gpgcheck => '1',
         gpgkey   => 'http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs',
+      }
+      file { "/etc/pki/rpm-gpg/RPM-GPG-KEY-puppetlabs":
+        ensure => present,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+        source => "puppet:///modules/${module_name}/RPM-GPG-KEY-puppetlabs",
+        before => Yumrepo['puppetlabs','puppetlabs-deps']
       }
     } else {
       fail("Unsupported osfamily ${::osfamily}")
